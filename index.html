@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LỚP 8C - Secured Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- CÀI ĐẶT GIAO DIỆN CAO CẤP --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* Tạo nền chuyển màu động (Gradient Animation) */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Hiệu ứng kính mờ (Glassmorphism) cho khung đăng nhập */
+        .login-card {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            color: white;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px 0 rgba(31, 38, 135, 0.5);
+        }
+
+        h1 {
+            font-weight: 900;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* Style cho ô nhập liệu */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2); /* Nền trong suốt */
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: background 0.3s, border 0.3s;
+            border: 1px solid transparent;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid #fff;
+        }
+
+        /* Nút bấm hiệu ứng Neon */
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 30px;
+            background: #fff;
+            color: #e73c7e;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .error-message {
+            color: #ffdddd;
+            background-color: rgba(255, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none; /* Mặc định ẩn */
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        /* Màn hình loading khi thành công */
+        .loader-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .loader-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #fff;
+            border-top: 5px solid #e73c7e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .success-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hiệu ứng rung khi sai mật khẩu */
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card" id="loginCard">
+        <h1>LỚP 8C</h1>
+        <div class="subtitle">Cổng thông tin nội bộ</div>
+
+        <div class="input-group">
+            <label for="username">Tên đăng nhập</label>
+            <input type="text" id="username" placeholder="Nhập tên...">
+        </div>
+
+        <div class="input-group">
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" placeholder="Nhập mật khẩu...">
+        </div>
+
+        <button onclick="handleLogin()">ĐĂNG NHẬP</button>
+
+        <div id="errorMsg" class="error-message">
+            ⚠ Thông tin đăng nhập không chính xác!
+        </div>
+
+        <div class="copyright">Developed by Dev Khôi 8C</div>
+    </div>
+
+    <div class="loader-overlay" id="loader">
+        <div class="spinner"></div>
+        <div class="success-text">Đang xác thực...</div>
+        <p style="color: #ccc; margin-top: 10px;">Chào mừng đến với 8C Group</p>
+    </div>
+
+    <script>
+        function handleLogin() {
+            // CẤU HÌNH TÊN ĐĂNG NHẬP VÀ MẬT KHẨU Ở ĐÂY
+            const CORRECT_USER = "Thầy Quang Mãi Đỉnh";
+            const CORRECT_PASS = "Dungnhansaicamcai";
+            const TARGET_LINK = "https://zalo.me/g/ilvojl943";
+
+            // Lấy giá trị input
+            const userIn = document.getElementById('username').value;
+            const passIn = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMsg');
+            const card = document.getElementById('loginCard');
+            const loader = document.getElementById('loader');
+
+            // Kiểm tra chính xác (Phân biệt hoa thường để tăng độ khó)
+            if (userIn === CORRECT_USER && passIn === CORRECT_PASS) {
+                // 1. Ẩn lỗi nếu có
+                errorDiv.style.display = 'none';
+                
+                // 2. Hiện màn hình loading "ngầu"
+                loader.classList.add('active');
+
+                // 3. Đợi 2 giây (tạo cảm giác đang xử lý) rồi chuyển trang
+                setTimeout(() => {
+                    window.location.href = TARGET_LINK;
+                }, 2000);
+
+            } else {
+                // Xử lý khi sai
+                errorDiv.style.display = 'block';
+                errorDiv.innerText = "⚠ Sai rồi! Cấm cái sai cái :))";
+                
+                // Thêm hiệu ứng rung lắc
+                card.classList.add('shake');
+                
+                // Xóa hiệu ứng rung sau 0.5s để lần sau còn rung tiếp
+                setTimeout(() => {
+                    card.classList.remove('shake');
+                }, 500);
+                
+                // Xóa mật khẩu đi
+                document.getElementById('password').value = "";
+                document.getElementById('password').focus();
+            }
+        }
+
+        // Cho phép ấn Enter để đăng nhập luôn
+        document.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+    </script>
+</body>
+</html>
