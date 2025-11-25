@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đang Bảo Trì | Sắp Trở Lại Cực Chất!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ff88;
+            --secondary: #ff00ff;
+            --dark: #0d0d0d;
+            --glitch: #ff0040;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #000 100%);
+            overflow: hidden;
+            font-family: 'Roboto Mono', monospace;
+            color: white;
+            position: relative;
+        }
+
+        /* Hiệu ứng hạt nền */
+        #particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .glitch {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 12vw, 10rem);
+            font-weight: 900;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            text-shadow: 
+                0 0 10px var(--primary),
+                0 0 20px var(--primary),
+                0 0 40px var(--primary),
+                0 0 80px var(--primary);
+            animation: glow 2s infinite alternate;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: 'Đang Bảo Trì';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-1 0.5s infinite;
+            color: var(--secondary);
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        }
+
+        .glitch::after {
+            animation: glitch-2 0.5s infinite;
+            color: var(--glitch);
+            clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+        }
+
+        @keyframes glitch-1 {
+            0%,100% { transform: translate(0); }
+            20% { transform: translate(-5px, 5px); }
+            40% { transform: translate(-5px, -5px); }
+            60% { transform: translate(5px, 5px); }
+            80% { transform: translate(5px, -5px); }
+        }
+
+        @keyframes glitch-2 {
+            0%,100% { transform: translate(0); }
+            20% { transform: translate(5px, -5px); }
+            40% { transform: translate(5px, 5px); }
+            60% { transform: translate(-5px, -5px); }
+            80% { transform: translate(-5px, 5px); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary); }
+            to { text-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary), 0 0 80px var(--primary), 0 0 160px var(--primary); }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin: 2rem 0;
+            opacity: 0.9;
+            background: linear-gradient(90deg, #00ff88, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: hue 8s infinite linear;
+        }
+
+        @keyframes hue {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .countdown {
+            display: flex;
+            gap: 2rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .time-box {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0,255,136,0.3);
+            min-width: 120px;
+            box-shadow: 0 0 30px rgba(0,255,136,0.2);
+        }
+
+        .time-box span {
+            display: block;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-shadow: 0 0 20px var(--primary);
+        }
+
+        .time-box small {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .socials {
+            margin-top: 4rem;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .socials a {
+            color: white;
+            font-size: 2rem;
+            transition: all 0.3s;
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .socials a:hover {
+            transform: translateY(-10px) scale(1.2);
+            filter: drop-shadow(0 0 20px currentColor);
+        }
+
+        .neon-border {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #00ff88, #ff00ff, #00ffff) 1;
+            animation: borderGlow 4s infinite;
+            pointer-events: none;
+            border-radius: 20px;
+        }
+
+        @keyframes borderGlow {
+            0%,100% { box-shadow: 0 0 20px rgba(0,255,136,0.5); }
+            50% { box-shadow: 0 0 50px rgba(255,0,255,0.8); }
+        }
+
+        footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles"></div>
+    <div class="neon-border"></div>
+
+    <div class="container">
+        <h1 class="glitch" data-text="Đang Bảo Trì">Đang Bảo Trì</h1>
+        <p class="subtitle">Chúng tôi đang nâng cấp hệ thống để mang đến trải nghiệm <br> <strong>SIÊU PHÀM</strong> hơn bao giờ hết!</p>
+
+        <div class="countdown" id="countdown">
+            <div class="time-box"><span id="days">00</span><small>Ngày</small></div>
+            <div class="time-box"><span id="hours">00</span><small>Giờ</small></div>
+            <div class="time-box"><span id="minutes">00</span><small>Phút</small></div>
+            <div class="time-box"><span id="seconds">00</span><small>Giây</small></div>
+        </div>
+
+        <div class="socials">
+            <a href="#" style="color:#00ff88">⚡</a>
+            <a href="#" style="color:#ff00ff">✨</a>
+            <a href="#" style="color:#00ffff">🔥</a>
+        </div>
+    </div>
+
+    <footer>© 2025 Your Awesome Brand. Sắp comeback mạnh mẽ hơn bao giờ hết!</footer>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Particles nền siêu xịn
+        particlesJS("particles", {
+            "particles": {
+                "number": { "value": 160, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#00ff88", "#ff00ff", "#00ffff"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.8, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00ff88", "opacity": 0.3, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" },
+                    "onclick": { "enable": true, "mode": "push" },
+                    "resize": true
+                }
+            },
+            "retina_detect": true
+        });
+
+        // Countdown (đặt thời gian bạn muốn mở lại web - ví dụ 48 tiếng nữa)
+        const countdownDate = new Date().getTime() + (48 * 60 * 60 * 1000); // 48 tiếng
+
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.querySelector(".container").innerHTML = "<h1 class='glitch'>WE'RE BACK!</h1>";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
